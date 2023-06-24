@@ -1,0 +1,23 @@
+{
+  "name": "fullstack-developer-tools",
+  "version": "1.0.0",
+  "description": "Tools that make fullstack developer life easier",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anlac96/fullstack-developer-tools.git"
+  },
+  "author": "anlac96",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anlac96/fullstack-developer-tools/issues"
+  },
+  "homepage": "https://github.com/anlac96/fullstack-developer-tools#readme",
+  "devDependencies": {
+    "typescript": "^5.1.3"
+  }
+}
