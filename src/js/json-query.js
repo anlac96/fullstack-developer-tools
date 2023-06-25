@@ -10,7 +10,7 @@ function geResult(object, queryPaths) {
             result = result[queryPath];
         }
         else {
-            result = 'undefined';
+            result = undefined;
             break;
         }
     }

@@ -9,7 +9,7 @@ function geResult(object: object, queryPaths: string[]): object {
         if (result) {
             result = result[queryPath]
         } else {
-            result = 'undefined'
+            result = undefined
             break
         }
     }
