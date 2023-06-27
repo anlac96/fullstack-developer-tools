@@ -12,15 +12,22 @@
         integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.1.js"
         integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+
+    <script src="node_modules/jquery.json-viewer/json-viewer/jquery.json-viewer.js"></script>
+    <link href="node_modules/jquery.json-viewer/json-viewer/jquery.json-viewer.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="./src/css/json-query.css">
 </head>
 
 <body>
     <div class="d-flex container">
         <div class="col-6 pe-3">
-            <h2>JSON</h2>
-            <textarea id="originJSON" class="form-control" style="height: calc(100vh - 50px)">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>JSON</h2>
+                <button name="formatJsonButton" class="btn btn-info">Format</button>
+            </div>
+            <div id="originJSON" contenteditable="true" class="form-control" style="height: calc(100vh - 50px)">
                 { "key": "value", "arrs": ["a", "b"]}
-            </textarea>
+            </div>
         </div>
         <div class="col-6 d-flex flex-column gap-2">
             <div class="d-flex justify-content-between align-items-center">
@@ -75,7 +82,7 @@
         import { findNodeByQuery } from "./src/js/json-query.js";
 
         var jsonInputElement = $('#originJSON')
-        var object = JSON.parse(jsonInputElement.val())
+        var object = JSON.parse(jsonInputElement.text())
 
         function updateResultForQuery(jsonQueryExprElement) {
             let self = $(jsonQueryExprElement)
@@ -112,7 +119,12 @@
         $(document).ready(function () {
 
             jsonInputElement.focusout(() => {
-                    object = JSON.parse(jsonInputElement.val())
+                try {
+                    object = JSON.parse(jsonInputElement.text())
+                } catch (error) {
+                    object = {}
+                    // TODO: alert error message
+                }
                 const jsonQueryExprElements = $("input[json-query]")
                 jsonQueryExprElements.each((index, jsonQueryExprElement) => updateResultForQuery(jsonQueryExprElement))
             })
@@ -124,22 +136,10 @@
             $("button[name=addOneAmount]").click(() => changeAddingAmount('ADD'))
             $("button[name=subtractOneAmount]").click(() => changeAddingAmount('SUBTRACT'))
             $("button[name=addQueryButton]").click(addQuery)
+            $("button[name=formatJsonButton]").click(() => jsonInputElement.jsonViewer(object))
         })
     </script>
 
-    <style>
-        /* Chrome, Safari, Edge, Opera */
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        /* Firefox */
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-    </style>
 </body>
 
 </html>
