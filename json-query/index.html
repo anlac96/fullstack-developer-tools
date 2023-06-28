@@ -136,7 +136,7 @@
             $("button[name=addOneAmount]").click(() => changeAddingAmount('ADD'))
             $("button[name=subtractOneAmount]").click(() => changeAddingAmount('SUBTRACT'))
             $("button[name=addQueryButton]").click(addQuery)
-            $("button[name=formatJsonButton]").click(() => jsonInputElement.jsonViewer(object))
+            $("button[name=formatJsonButton]").click(() => jsonInputElement.jsonViewer(object, { withQuotes: true }))
         })
     </script>
 
