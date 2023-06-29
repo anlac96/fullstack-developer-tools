@@ -26,7 +26,7 @@
                 <button name="formatJsonButton" class="btn btn-info">Format</button>
             </div>
             <div id="originJSON" contenteditable="true" class="form-control" style="height: calc(100vh - 50px)">
-                { "key": "value", "arrs": ["a", "b"]}
+                { "key": "value", "arrs": ["a", "b"], "obj": { "key": "value" } }
             </div>
         </div>
         <div class="col-6 d-flex flex-column gap-2">
@@ -81,8 +81,12 @@
     <script type="module">
         import { findNodeByQuery } from "./src/js/json-query.js";
 
+        $.fn.ignore = function (sel) {
+            return this.clone().find(sel || ">*").remove().end();
+        };
+
         var jsonInputElement = $('#originJSON')
-        var object = JSON.parse(jsonInputElement.text())
+        var object = JSON.parse(jsonInputElement.ignore('.json-placeholder').text())
 
         function updateResultForQuery(jsonQueryExprElement) {
             let self = $(jsonQueryExprElement)
@@ -120,7 +124,7 @@
 
             jsonInputElement.focusout(() => {
                 try {
-                    object = JSON.parse(jsonInputElement.text())
+                    object = JSON.parse(jsonInputElement.ignore('.json-placeholder').text())
                 } catch (error) {
                     object = {}
                     // TODO: alert error message
