@@ -9,3 +9,9 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+.json-toggle,
+.json-toggle>.json-string,
+.json-placeholder {
+    cursor: pointer;
+}
