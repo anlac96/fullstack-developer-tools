@@ -15,3 +15,15 @@ input[type=number] {
 .json-placeholder {
     cursor: pointer;
 }
+
+@media (min-width: 1600px) {
+    .container-xxl--super-large {
+        max-width: 1500px;
+    }
+}
+
+@media (min-width: 1824px) {
+    .container-xxl--super-large {
+        max-width: 1624px;
+    }
+}

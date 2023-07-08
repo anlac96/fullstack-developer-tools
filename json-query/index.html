@@ -19,21 +19,21 @@
 </head>
 
 <body>
-    <div class="d-flex container">
+    <div class="d-flex container-xxl container-xxl--super-large">
         <div class="col-6 pe-3">
             <div class="d-flex justify-content-between align-items-center">
                 <h2>JSON</h2>
                 <button name="formatJsonButton" class="btn btn-info">Format</button>
             </div>
-            <div id="originJSON" contenteditable="true" class="form-control" style="height: calc(100vh - 50px)">
+            <div id="originJSON" contenteditable="true" class="form-control overflow-auto text-break" style="height: calc(100vh - 50px)">
                 { "key": "value", "arrs": ["a", "b"], "obj": { "key": "value" } }
             </div>
         </div>
-        <div class="col-6 d-flex flex-column gap-2">
+        <div class="col-6 d-flex flex-column">
             <div class="d-flex justify-content-between align-items-center">
                 <h2>Query</h2>
                 <div class="d-flex gap-2 align-items-center">
-                    <span>Add more queries:</span>
+                    <!-- <span>Add more queries:</span>
                     <div class="input-group" style="width: 120px">
                         <input name="addingAmount" type="number" class="form-control" value="1"
                             aria-label="Recipient's username with two button addons">
@@ -41,38 +41,38 @@
                         </button>
                         <button name="addOneAmount" class="btn btn-outline-secondary" type="button"> +
                         </button>
-                    </div>
+                    </div> -->
                     <button name="addQueryButton" class="btn btn-info">Add</button>
                 </div>
             </div>
-            <div id="json-queries" class="pe-2" style="height: calc(100vh - 55px); overflow: auto;">
+            <div id="json-queries" class="pt-1 pe-1 overflow-auto" style="height: calc(100vh - 50px);">
                 <div class="json-query">
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1">JQL</span>
                         <input type="text" json-query value="key" class="form-control"></input>
                     </div>
-                    <p json-query-result></p>
+                    <p json-query-result class="text-break"></p>
                 </div>
                 <div class="json-query">
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1">JQL</span>
                         <input type="text" json-query value="arrs.0" class="form-control"></input>
                     </div>
-                    <p json-query-result></p>
+                    <p json-query-result class="text-break"></p>
                 </div>
                 <div class="json-query">
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1">JQL</span>
                         <input type="text" json-query value="arrs.0" class="form-control"></input>
                     </div>
-                    <p json-query-result></p>
+                    <p json-query-result class="text-break"></p>
                 </div>
                 <div class="json-query">
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1">JQL</span>
                         <input type="text" json-query value="arrs.0" class="form-control"></input>
                     </div>
-                    <p json-query-result></p>
+                    <p json-query-result class="text-break"></p>
                 </div>
             </div>
         </div>
@@ -113,7 +113,7 @@
                         <span class="input-group-text" id="basic-addon1">JQL</span>
                         <input type="text" json-query class="form-control"></input>
                     </div>
-                    <p json-query-result></p>
+                    <p json-query-result class="text-break"></p>
                 </div>`
             const newQueryElement = $(queryTemplate);
             newQueryElement.focusout(event => { updateResultForQuery(event.target) });
