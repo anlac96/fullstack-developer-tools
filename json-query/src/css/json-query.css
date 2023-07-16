@@ -16,6 +16,25 @@ input[type=number] {
     cursor: pointer;
 }
 
+.json-container {
+    position: relative;
+    min-height: 60px;
+}
+
+.json-container .json-format-button {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.6s linear;
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+
+.json-container:hover .json-format-button {
+    visibility: visible;
+    opacity: 1;
+}
+
 @media (min-width: 1600px) {
     .container-xxl--super-large {
         max-width: 1500px;

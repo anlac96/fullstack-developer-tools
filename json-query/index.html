@@ -23,10 +23,12 @@
         <div class="col-6 pe-3">
             <div class="d-flex justify-content-between align-items-center">
                 <h2>JSON</h2>
-                <button name="formatJsonButton" class="btn btn-info">Format</button>
             </div>
-            <div id="originJSON" contenteditable="true" class="form-control overflow-auto text-break" style="height: calc(100vh - 50px)">
+            <div class="json-container">
+                <button json-format-button class="json-format-button btn btn-info">Format</button>
+                <div id="originJSON" contenteditable="true" json-document class="form-control overflow-auto text-break" style="height: calc(100vh - 50px)">
                 { "key": "value", "arrs": ["a", "b"], "obj": { "key": "value" } }
+                </div>
             </div>
         </div>
         <div class="col-6 d-flex flex-column">
@@ -48,31 +50,43 @@
             <div id="json-queries" class="pt-1 pe-1 overflow-auto" style="height: calc(100vh - 50px);">
                 <div class="json-query">
                     <div class="input-group">
-                        <span class="input-group-text" id="basic-addon1">JQL</span>
+                        <span class="input-group-text">JQL</span>
                         <input type="text" json-query value="key" class="form-control"></input>
                     </div>
-                    <p json-query-result class="text-break"></p>
+                    <div class="json-container">
+                        <button json-format-button class="json-format-button btn btn-info">Format</button>
+                        <p json-document class="json-document text-break"></p>
+                    </div>
                 </div>
                 <div class="json-query">
                     <div class="input-group">
-                        <span class="input-group-text" id="basic-addon1">JQL</span>
+                        <span class="input-group-text">JQL</span>
                         <input type="text" json-query value="arrs.0" class="form-control"></input>
                     </div>
-                    <p json-query-result class="text-break"></p>
+                    <div class="json-container">
+                        <button json-format-button class="json-format-button btn btn-info">Format</button>
+                        <p json-document class="json-document text-break"></p>
+                    </div>
                 </div>
                 <div class="json-query">
                     <div class="input-group">
-                        <span class="input-group-text" id="basic-addon1">JQL</span>
-                        <input type="text" json-query value="arrs.0" class="form-control"></input>
+                        <span class="input-group-text">JQL</span>
+                        <input type="text" json-query value="obj" class="form-control"></input>
                     </div>
-                    <p json-query-result class="text-break"></p>
+                    <div class="json-container">
+                        <button json-format-button class="json-format-button btn btn-info">Format</button>
+                        <p json-document class="json-document text-break"></p>
+                    </div>
                 </div>
                 <div class="json-query">
                     <div class="input-group">
-                        <span class="input-group-text" id="basic-addon1">JQL</span>
-                        <input type="text" json-query value="arrs.0" class="form-control"></input>
+                        <span class="input-group-text">JQL</span>
+                        <input type="text" json-query value="obj.key" class="form-control"></input>
                     </div>
-                    <p json-query-result class="text-break"></p>
+                    <div class="json-container">
+                        <button json-format-button class="json-format-button btn btn-info">Format</button>
+                        <p json-document class="json-document text-break"></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,11 +102,28 @@
         var jsonInputElement = $('#originJSON')
         var object = JSON.parse(jsonInputElement.ignore('.json-placeholder').text())
 
+        var jsonViewerOptions = { withQuotes: true }
+
+
+        function parseJsonElementToObject(originElement) {
+            try {
+                return JSON.parse($(originElement).ignore('.json-placeholder').text())
+            } catch (error) {
+                return { error: "Invalid JSON format" }
+            }
+        }
+        
+        function formatJsonElement() {
+            let jsonElement = $(this).siblings("[json-document]");
+            let object = parseJsonElementToObject(jsonElement);
+            jsonElement.jsonViewer(object, jsonViewerOptions)
+        }
+
         function updateResultForQuery(jsonQueryExprElement) {
             let self = $(jsonQueryExprElement)
             const queryExpr = self.val()
             const foundNode = findNodeByQuery(object, queryExpr)
-            self.parent().siblings('p[json-query-result]').text(JSON.stringify(foundNode) || 'undefined')
+            self.parent().siblings('.json-container').children('p[json-document]').text(JSON.stringify(foundNode) || 'undefined')
         }
 
         function changeAddingAmount(action) {
@@ -110,13 +141,17 @@
             const queryTemplate =
                 `<div class="json-query">
                     <div class="input-group">
-                        <span class="input-group-text" id="basic-addon1">JQL</span>
+                        <span class="input-group-text">JQL</span>
                         <input type="text" json-query class="form-control"></input>
                     </div>
-                    <p json-query-result class="text-break"></p>
+                    <div class="json-container">
+                        <button json-format-button class="json-format-button btn btn-info">Format</button>
+                        <p json-document class="json-document text-break"></p>
+                    </div>
                 </div>`
             const newQueryElement = $(queryTemplate);
             newQueryElement.focusout(event => { updateResultForQuery(event.target) });
+            newQueryElement.find("button[json-format-button]").click(formatJsonElement);
             $("#json-queries").append(newQueryElement)
         }
 
@@ -126,8 +161,7 @@
                 try {
                     object = JSON.parse(jsonInputElement.ignore('.json-placeholder').text())
                 } catch (error) {
-                    object = {}
-                    // TODO: alert error message
+                    object = { error: "Invalid JSON format" }
                 }
                 const jsonQueryExprElements = $("input[json-query]")
                 jsonQueryExprElements.each((index, jsonQueryExprElement) => updateResultForQuery(jsonQueryExprElement))
@@ -140,7 +174,7 @@
             $("button[name=addOneAmount]").click(() => changeAddingAmount('ADD'))
             $("button[name=subtractOneAmount]").click(() => changeAddingAmount('SUBTRACT'))
             $("button[name=addQueryButton]").click(addQuery)
-            $("button[name=formatJsonButton]").click(() => jsonInputElement.jsonViewer(object, { withQuotes: true }))
+            $("button[json-format-button]").click(formatJsonElement);
         })
     </script>
 
