@@ -107,7 +107,8 @@
 
         function parseJsonElementToObject(originElement) {
             try {
-                return JSON.parse($(originElement).ignore('.json-placeholder').text())
+                let jsonString = $(originElement).ignore('.json-placeholder').text().replace(/\s/g, '');
+                return JSON.parse(jsonString);
             } catch (error) {
                 return { error: "Invalid JSON format" }
             }
