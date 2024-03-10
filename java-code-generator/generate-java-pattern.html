@@ -54,13 +54,22 @@
                 </div>
 
                 <div>{{ formData.generatedCode }}</div>
-                <button
-                    @click="copyToClipboard"
-                    type="button"
-                    class="btn btn-primary"
-                >
-                    Copy to Clipboard
-                </button>
+                <div class="row my-2">
+                    <button
+                        @click="copyToClipboard"
+                        type="button"
+                        class="btn btn-primary col-auto me-1"
+                    >
+                        Copy to Clipboard
+                    </button>
+                    <div
+                        v-if="isCopiedToClipboard"
+                        class="alert alert-primary col-auto m-0 py-1"
+                        role="alert"
+                    >
+                        Copied!
+                    </div>
+                </div>
             </form>
         </div>
     </body>
@@ -99,6 +108,7 @@
                     pattern: "",
                     generatedCode: "",
                 });
+                const isCopiedToClipboard = ref(false);
                 const patterns = [
                     {
                         id: "GET_INSTANCE",
@@ -128,6 +138,8 @@
                 };
                 const copyToClipboard = function () {
                     navigator.clipboard.writeText(formData.generatedCode);
+                    isCopiedToClipboard.value = true;
+                    setTimeout(() => (isCopiedToClipboard.value = false), 1000);
                 };
 
                 watch(formData, (formData) => {
@@ -137,6 +149,7 @@
                 return {
                     formData,
                     patterns,
+                    isCopiedToClipboard,
                     generateCode,
                     copyToClipboard,
                 };
