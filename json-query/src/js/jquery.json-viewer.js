@@ -98,8 +98,6 @@
             if (Object.prototype.hasOwnProperty.call(json, key)) {
               key = htmlEscape(key);
               let currentPath = `${parentPath ? parentPath + "." : ''}${key}`;
-              //var keyRepr = options.withQuotes ?
-              //  '<span class="json-string" data-json-path="' + currentPath +'">"' + key + '"</span>' : key;
               var keyRepr = `<span class="json-string" data-json-path="${currentPath}">${options.withQuotes ? `"${key}"` : key}</span>`
 
               html += '<li>';
