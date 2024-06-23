@@ -170,6 +170,11 @@
         return false;
       });
 
+      $(this).find('a.json-show-path-button')
+        .on('click', function () {
+          navigator.clipboard.writeText($(this).attr('data-json-path'));
+        });
+
       // Simulate click on toggle button when placeholder is clicked
       $(this).on('click', 'a.json-placeholder', function () {
         $(this).siblings('a.json-toggle').click();
