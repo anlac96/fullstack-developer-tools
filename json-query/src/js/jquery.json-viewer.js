@@ -3,7 +3,7 @@
  * @author: Alexandre Bodelot <alexandre.bodelot@gmail.com>
  * @link: https://github.com/abodelot/jquery.json-viewer
  */
-(function($) {
+(function ($) {
 
   /**
    * Check if arg is either an array with at least 1 element, or a dict with at least 1 key
@@ -68,11 +68,12 @@
         html += '[<ol class="json-array">';
         for (var i = 0; i < json.length; ++i) {
           html += '<li>';
-          let currentPath = parentPath ? `${parentPath}.[${i}]` : `[${i}]`
+          let currentPath = parentPath ? `${parentPath}.[${i}]` : `[${i}]`;
           // Add toggle button if item is collapsable
           if (isCollapsable(json[i])) {
-            html += '<a href class="json-toggle" data-json-path="' + currentPath + '"></a>';
+            html += '<a href class="json-toggle"></a>';
           }
+          html += `<a href class="json-show-path-button json-makeup-ignore" data-json-path="${currentPath}">PATH</a>`;
           html += json2html(json[i], options, currentPath);
           // Add comma if item is not last
           if (i < json.length - 1) {
@@ -98,7 +99,7 @@
             if (Object.prototype.hasOwnProperty.call(json, key)) {
               key = htmlEscape(key);
               let currentPath = `${parentPath ? parentPath + "." : ''}${key}`;
-              var keyRepr = `<span class="json-string" data-json-path="${currentPath}">${options.withQuotes ? `"${key}"` : key}</span>`
+              var keyRepr = `<span class="json-string">${options.withQuotes ? `"${key}"` : key}</span>`
 
               html += '<li>';
               // Add toggle button if item is collapsable
@@ -107,6 +108,7 @@
               } else {
                 html += keyRepr;
               }
+              html += `<a href class="json-show-path-button json-makeup-ignore" data-json-path="${currentPath}">PATH</a>`;
               html += ': ' + json2html(json[key], options, currentPath);
               // Add comma if item is not last
               if (--keyCount > 0) {
@@ -129,7 +131,7 @@
    * @param json: a javascript object
    * @param options: an optional options hash
    */
-  $.fn.jsonViewer = function(json, options) {
+  $.fn.jsonViewer = function (json, options) {
     // Merge user options with default options
     options = Object.assign({}, {
       collapsed: false,
@@ -141,7 +143,7 @@
     }, options);
 
     // jQuery chaining
-    return this.each(function() {
+    return this.each(function () {
 
       // Transform to HTML
       var html = json2html(json, options);
@@ -155,7 +157,7 @@
 
       // Bind click on toggle buttons
       $(this).off('click');
-      $(this).on('click', 'a.json-toggle', function() {
+      $(this).on('click', 'a.json-toggle', function () {
         var target = $(this).toggleClass('collapsed').siblings('ul.json-dict, ol.json-array');
         target.toggle();
         if (target.is(':visible')) {
@@ -169,7 +171,7 @@
       });
 
       // Simulate click on toggle button when placeholder is clicked
-      $(this).on('click', 'a.json-placeholder', function() {
+      $(this).on('click', 'a.json-placeholder', function () {
         $(this).siblings('a.json-toggle').click();
         return false;
       });
