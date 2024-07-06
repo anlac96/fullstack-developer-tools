@@ -26,8 +26,9 @@
             </div>
             <div class="json-container">
                 <button json-format-button class="json-format-button btn btn-info">Format</button>
-                <div id="originJSON" contenteditable="true" json-document class="form-control overflow-auto text-break" style="height: calc(100vh - 50px)">
-                { "key": "value", "arrs": ["a", "b"], "obj": { "key": "value" } }
+                <div id="originJSON" contenteditable="true" json-document class="form-control overflow-auto text-break"
+                    style="height: calc(100vh - 50px)">
+                    { "key": "value", "arrs": ["a", "b"], "obj": { "key": "value" } }
                 </div>
             </div>
         </div>
@@ -50,7 +51,7 @@
             <div id="json-queries" class="pt-1 pe-1 overflow-auto" style="height: calc(100vh - 50px);">
                 <div class="json-query">
                     <div class="input-group">
-                        <span class="input-group-text">JQL</span>
+                        <span class="input-group-text">PATH</span>
                         <input type="text" json-query value="key" class="form-control"></input>
                     </div>
                     <div class="json-container">
@@ -60,7 +61,7 @@
                 </div>
                 <div class="json-query">
                     <div class="input-group">
-                        <span class="input-group-text">JQL</span>
+                        <span class="input-group-text">PATH</span>
                         <input type="text" json-query value="arrs.0" class="form-control"></input>
                     </div>
                     <div class="json-container">
@@ -70,7 +71,7 @@
                 </div>
                 <div class="json-query">
                     <div class="input-group">
-                        <span class="input-group-text">JQL</span>
+                        <span class="input-group-text">PATH</span>
                         <input type="text" json-query value="obj" class="form-control"></input>
                     </div>
                     <div class="json-container">
@@ -80,7 +81,7 @@
                 </div>
                 <div class="json-query">
                     <div class="input-group">
-                        <span class="input-group-text">JQL</span>
+                        <span class="input-group-text">PATH</span>
                         <input type="text" json-query value="obj.key" class="form-control"></input>
                     </div>
                     <div class="json-container">
@@ -100,20 +101,20 @@
         };
 
         var jsonInputElement = $('#originJSON')
-        var object = JSON.parse(jsonInputElement.ignore('.json-placeholder').text())
+        var object = JSON.parse(jsonInputElement.ignore('.json-makeup-ignore').text())
 
         var jsonViewerOptions = { withQuotes: true }
 
 
         function parseJsonElementToObject(originElement) {
             try {
-                let jsonString = $(originElement).ignore('.json-placeholder').text().replace(/\s/g, '');
+                let jsonString = $(originElement).ignore('.json-makeup-ignore').text().replace(/\s/g, '');
                 return JSON.parse(jsonString);
             } catch (error) {
                 return { error: "Invalid JSON format" }
             }
         }
-        
+
         function formatJsonElement() {
             let jsonElement = $(this).siblings("[json-document]");
             let object = parseJsonElementToObject(jsonElement);
@@ -142,7 +143,7 @@
             const queryTemplate =
                 `<div class="json-query">
                     <div class="input-group">
-                        <span class="input-group-text">JQL</span>
+                        <span class="input-group-text">PATH</span>
                         <input type="text" json-query class="form-control"></input>
                     </div>
                     <div class="json-container">
@@ -160,7 +161,7 @@
 
             jsonInputElement.focusout(() => {
                 try {
-                    object = JSON.parse(jsonInputElement.ignore('.json-placeholder').text())
+                    object = JSON.parse(jsonInputElement.ignore('.json-makeup-ignore').text())
                 } catch (error) {
                     object = { error: "Invalid JSON format" }
                 }

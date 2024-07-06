@@ -55,3 +55,13 @@ a.json-placeholder {
 a.json-placeholder:hover {
   text-decoration: underline;
 }
+a.json-show-path-button {
+  text-decoration: none;
+  border-radius: 2px;
+  background-color: black;
+  color: white;
+  font-family: "Courier New";
+  padding: 1px 2px;
+  font-size: small;
+  cursor: pointer;
+}

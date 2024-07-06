@@ -3,7 +3,7 @@
  * @author: Alexandre Bodelot <alexandre.bodelot@gmail.com>
  * @link: https://github.com/abodelot/jquery.json-viewer
  */
-(function($) {
+(function ($) {
 
   /**
    * Check if arg is either an array with at least 1 element, or a dict with at least 1 key
@@ -44,7 +44,7 @@
    * Transform a json object into html representation
    * @return string
    */
-  function json2html(json, options) {
+  function json2html(json, options, parentPath = '') {
     var html = '';
     if (typeof json === 'string') {
       // Escape tags and quotes
@@ -68,11 +68,13 @@
         html += '[<ol class="json-array">';
         for (var i = 0; i < json.length; ++i) {
           html += '<li>';
+          let currentPath = parentPath ? `${parentPath}.[${i}]` : `[${i}]`;
           // Add toggle button if item is collapsable
           if (isCollapsable(json[i])) {
             html += '<a href class="json-toggle"></a>';
           }
-          html += json2html(json[i], options);
+          html += `<a href class="json-show-path-button json-makeup-ignore" data-json-path="${currentPath}">PATH</a>`;
+          html += json2html(json[i], options, currentPath);
           // Add comma if item is not last
           if (i < json.length - 1) {
             html += ',';
@@ -96,8 +98,8 @@
           for (var key in json) {
             if (Object.prototype.hasOwnProperty.call(json, key)) {
               key = htmlEscape(key);
-              var keyRepr = options.withQuotes ?
-                '<span class="json-string">"' + key + '"</span>' : key;
+              let currentPath = `${parentPath ? parentPath + "." : ''}${key}`;
+              var keyRepr = `<span class="json-string">${options.withQuotes ? `"${key}"` : key}</span>`
 
               html += '<li>';
               // Add toggle button if item is collapsable
@@ -106,7 +108,8 @@
               } else {
                 html += keyRepr;
               }
-              html += ': ' + json2html(json[key], options);
+              html += `<a href class="json-show-path-button json-makeup-ignore" data-json-path="${currentPath}">PATH</a>`;
+              html += ': ' + json2html(json[key], options, currentPath);
               // Add comma if item is not last
               if (--keyCount > 0) {
                 html += ',';
@@ -128,18 +131,19 @@
    * @param json: a javascript object
    * @param options: an optional options hash
    */
-  $.fn.jsonViewer = function(json, options) {
+  $.fn.jsonViewer = function (json, options) {
     // Merge user options with default options
     options = Object.assign({}, {
       collapsed: false,
       rootCollapsable: true,
       withQuotes: false,
       withLinks: true,
-      bigNumbers: false
+      bigNumbers: false,
+      withPaths: false,
     }, options);
 
     // jQuery chaining
-    return this.each(function() {
+    return this.each(function () {
 
       // Transform to HTML
       var html = json2html(json, options);
@@ -153,7 +157,7 @@
 
       // Bind click on toggle buttons
       $(this).off('click');
-      $(this).on('click', 'a.json-toggle', function() {
+      $(this).on('click', 'a.json-toggle', function () {
         var target = $(this).toggleClass('collapsed').siblings('ul.json-dict, ol.json-array');
         target.toggle();
         if (target.is(':visible')) {
@@ -161,13 +165,18 @@
         } else {
           var count = target.children('li').length;
           var placeholder = count + (count > 1 ? ' items' : ' item');
-          target.after('<a href class="json-placeholder">' + placeholder + '</a>');
+          target.after('<a href class="json-placeholder json-makeup-ignore">' + placeholder + '</a>');
         }
         return false;
       });
 
+      $(this).find('a.json-show-path-button')
+        .on('click', function () {
+          navigator.clipboard.writeText($(this).attr('data-json-path'));
+        });
+
       // Simulate click on toggle button when placeholder is clicked
-      $(this).on('click', 'a.json-placeholder', function() {
+      $(this).on('click', 'a.json-placeholder', function () {
         $(this).siblings('a.json-toggle').click();
         return false;
       });
