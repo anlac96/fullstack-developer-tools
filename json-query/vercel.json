@@ -1,7 +1,7 @@
 {
     "redirects": [
       {
-        "source": "/index.html",
+        "source": "/",
         "destination": "https://devtoolkits.vercel.app",
         "permanent": true
       }
